@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 
@@ -9,8 +8,6 @@ export default function Page() {
 
   return (
     <>
-      <StatusBar style="light" />
-
       <Onboarding
         transitionAnimationDuration={300}
         titleStyles={{
