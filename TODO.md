@@ -1,8 +1,8 @@
 # TODO
 
-[] Custom Font Setup
-[] SVG or Dotted Background
-[] Working Onboarding
+[x] Custom Font Setup
+[x] SVG or Dotted Background
+[x] Working Onboarding
 [] Home Page
 [] Create Page
 [] Settings Page
