@@ -52,7 +52,7 @@ const RenderItem = ({
         index * SCREEN_WIDTH,
         (index + 1) * SCREEN_WIDTH,
       ],
-      [100, 0, 100],
+      [70, 0, 70],
       Extrapolation.CLAMP
     );
 
@@ -85,7 +85,7 @@ const RenderItem = ({
         index * SCREEN_WIDTH,
         (index + 1) * SCREEN_WIDTH,
       ],
-      [100, 0, 100],
+      [70, 0, 70],
       Extrapolation.CLAMP
     );
 
