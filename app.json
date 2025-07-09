@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hazari-tally",
+    "name": "Hazari Tally",
     "slug": "hazari-tally",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,8 +13,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/splash-icon.png",
+        "backgroundColor": "#070024"
       },
       "edgeToEdgeEnabled": true
     },
@@ -31,7 +31,16 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#070024"
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/righteous/400Regular/Righteous_400Regular.ttf",
+            "node_modules/@expo-google-fonts/outfit/400Regular/Outfit_400Regular.ttf"
+          ]
         }
       ]
     ],
