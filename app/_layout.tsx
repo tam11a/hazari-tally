@@ -2,10 +2,8 @@ import { Stack } from "expo-router";
 import "react-native-reanimated";
 
 import { LinearGradient } from "expo-linear-gradient";
-import { Dimensions, StatusBar, View } from "react-native";
-import Svg, { Circle } from "react-native-svg";
+import { Image, StatusBar, View } from "react-native";
 import "./global.css";
-
 // SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -31,12 +29,6 @@ export default function RootLayout() {
   StatusBar.setBackgroundColor("transparent", true);
   StatusBar.setTranslucent(true);
 
-  // Set the background color of the app
-  const gap = 10;
-  const dotSize = 2;
-  const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-  const cols = Math.ceil((screenWidth * 1.5) / gap) + 1;
-  const rows = Math.ceil((screenHeight * 1.5) / gap) + 1;
   return (
     <LinearGradient
       colors={["#9424BA", "#090030"]}
@@ -50,31 +42,17 @@ export default function RootLayout() {
         end={{ x: 0, y: 0.9 }}
         style={{ flex: 1, position: "relative" }}
       >
-        <Svg
-          pointerEvents="none"
+        <Image
+          source={require("@/assets/icons/dot.png")}
           style={{
             position: "absolute",
-            width: screenWidth * 1.5,
-            height: screenHeight * 1.5,
+            width: "100%",
+            height: "100%",
             zIndex: 0,
-            top: 0,
-            left: 0,
+            opacity: 0.05,
           }}
-          width={screenWidth * 1.5}
-          height={screenHeight * 1.5}
-        >
-          {Array.from({ length: rows }).map((_, row) =>
-            Array.from({ length: cols }).map((_, col) => (
-              <Circle
-                key={`${row}-${col}`}
-                cx={col * gap}
-                cy={row * gap}
-                r={dotSize / 2}
-                fill={"rgba(255,255,255,0.10)"}
-              />
-            ))
-          )}
-        </Svg>
+          resizeMode="repeat"
+        />
         <View className="flex-1 z-1">
           <Stack
             screenOptions={{
