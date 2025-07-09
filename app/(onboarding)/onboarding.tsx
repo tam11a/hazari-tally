@@ -57,8 +57,8 @@ const RenderItem = ({
     );
 
     return {
-      width: 182,
-      height: 182,
+      width: 152,
+      height: 152,
       maxWidth: SCREEN_WIDTH * 0.7,
       maxHeight: SCREEN_WIDTH * 0.7,
       opacity: opacityAnimation,
