@@ -29,9 +29,11 @@ export default function RootLayout() {
     <ThemeProvider value={DarkTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar translucent backgroundColor="transparent" />
+      {/* <View style={[styles.statusBarBackground, { height: insets.top, backgroundColor: 'blue' }]} /> */}
     </ThemeProvider>
   );
 }
