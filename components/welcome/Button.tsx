@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import React, { RefObject } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import Animated, {
@@ -22,6 +24,8 @@ export function Button({
   flatListIndex,
   flatListRef,
 }: ButtonProps) {
+  const router = useRouter();
+
   const buttonAnimationStyle = useAnimatedStyle(() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     return {
@@ -50,10 +54,18 @@ export function Button({
     };
   });
 
-  const handleNextScreen = () => {
+  const handleNextScreen = async () => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     if (!isLastScreen) {
       flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+      return;
+    }
+    // Save to AsyncStorage that the app has been initialized
+    try {
+      await AsyncStorage.setItem("appInitialized", "true");
+      router.replace("/(home)/main");
+    } catch (error) {
+      console.error("Error saving app initialization state:", error);
     }
   };
 

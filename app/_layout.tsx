@@ -87,8 +87,7 @@ export default function RootLayout() {
                 animation: "slide_from_right",
               }}
             >
-              <Stack.Screen name="(onboarding)/index" />
-              <Stack.Screen name="(onboarding)/onboarding" />
+              <Stack.Screen name="(onboarding)" />
               <Stack.Screen name="+not-found" />
             </Stack>
           </View>
