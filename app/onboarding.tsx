@@ -16,11 +16,11 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import { Button } from "@/components/welcome/Button";
+import { Pagination } from "@/components/welcome/Pagination";
+import data, { type Data } from "@/components/welcome/data";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "./Button";
-import { Pagination } from "./Pagination";
-import data, { type Data } from "./data";
 
 const RenderItem = ({
   item,
