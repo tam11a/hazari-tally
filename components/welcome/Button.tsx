@@ -61,6 +61,10 @@ export function Button({
     <AnimatedPressable
       onPress={handleNextScreen}
       style={[styles.container, buttonAnimationStyle]}
+      android_ripple={{
+        color: "#00000022",
+        foreground: true,
+      }}
     >
       <Animated.Text
         style={[styles.text, textAnimationStyle]}

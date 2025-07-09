@@ -7,6 +7,12 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      colors: {
+        text: "#ECEDEE",
+        background: "#070024",
+        tint: "#7F98FF",
+        icon: "#9BA1A6",
+      },
       fontFamily: {
         outfit: ["Outfit_400Regular", "sans-serif"],
         "outfit-bold": ["Outfit_700Bold", "sans-serif"],

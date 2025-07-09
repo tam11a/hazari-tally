@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     color: Colors.dark.tint,
-    fontSize: 30,
+    fontSize: 36,
     textAlign: "center",
     marginBottom: 16,
     marginTop: 60,
