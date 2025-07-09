@@ -97,12 +97,19 @@ const RenderItem = ({
 
   return (
     <View style={[styles.itemContainer, { width: SCREEN_WIDTH }]}>
+      <View />
+      <View />
       <Animated.Image source={item.image} style={imageAnimatedStyle} />
 
       <Animated.View style={textAnimatedStyle}>
-        <Text style={styles.itemTitle}>{item.title}</Text>
-        <Text style={styles.itemText}>{item.text}</Text>
+        <Text style={styles.itemTitle} className="font-righteous">
+          {item.title}
+        </Text>
+        <Text style={styles.itemText} className="font-outfit text-xl max-w-md">
+          {item.text}
+        </Text>
       </Animated.View>
+      <View />
     </View>
   );
 };
@@ -166,12 +173,11 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
   },
   itemTitle: {
     color: Colors.dark.tint,
     fontSize: 30,
-    fontWeight: "bold",
     textAlign: "center",
     marginBottom: 16,
     marginTop: 60,
@@ -179,8 +185,6 @@ const styles = StyleSheet.create({
   itemText: {
     color: Colors.dark.text,
     textAlign: "center",
-    lineHeight: 20,
-    maxWidth: 270,
     marginHorizontal: 30,
   },
   footerContainer: {

@@ -26,7 +26,7 @@ export default function App() {
         }}
       >
         <View className="bg-[#182D4D] px-16 py-4 rounded-full mx-auto">
-          <Text className="text-white">Get Started</Text>
+          <Text className="text-white font-outfit">Get Started</Text>
         </View>
       </Pressable>
       <Pressable

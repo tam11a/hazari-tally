@@ -62,7 +62,10 @@ export function Button({
       onPress={handleNextScreen}
       style={[styles.container, buttonAnimationStyle]}
     >
-      <Animated.Text style={[styles.text, textAnimationStyle]}>
+      <Animated.Text
+        style={[styles.text, textAnimationStyle]}
+        className={"font-outfit-bold"}
+      >
         Yes, I am
       </Animated.Text>
 
@@ -87,7 +90,6 @@ const styles = StyleSheet.create({
   text: {
     position: "absolute",
     fontSize: 16,
-    fontWeight: "bold",
     color: Colors.dark.background,
   },
 });

@@ -1,28 +1,46 @@
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import "react-native-reanimated";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, StatusBar, View } from "react-native";
 import "./global.css";
-// SplashScreen.preventAutoHideAsync();
+
+import {
+  Outfit_100Thin,
+  Outfit_400Regular,
+  Outfit_700Bold,
+  useFonts as useOutfit,
+} from "@expo-google-fonts/outfit";
+import {
+  Righteous_400Regular,
+  useFonts as useRighteous,
+} from "@expo-google-fonts/righteous";
+import { useEffect } from "react";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // Uncomment the following lines if you want to use custom fonts
-  // const [loaded, error] = useFonts({
-  //   Righteous_400Regular,
-  //   Outfit_400Regular,
-  // });
+  // Load the fonts
+  // Using the Expo Google Fonts package for Outfit and Righteous fonts
+  // This will ensure the fonts are loaded before the app is displayed
+  // If you want to use other fonts, you can import them similarly
+  // and add them to the useFonts hook.
+  const [outfitLoaded] = useOutfit({
+    Outfit_400Regular,
+    Outfit_700Bold,
+    Outfit_100Thin,
+  });
+  const [righteousLoaded] = useRighteous({ Righteous_400Regular });
 
-  // useEffect(() => {
-  //   if (loaded || error) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded, error]);
+  useEffect(() => {
+    if (outfitLoaded || righteousLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [outfitLoaded, righteousLoaded]);
 
-  // if (!loaded && !error) {
-  //   // Async font loading only occurs in development.
-  //   return null;
-  // }
+  if (!outfitLoaded || !righteousLoaded) {
+    return null; // or <AppLoading />
+  }
 
   // Set the status bar style and background color
   StatusBar.setBarStyle("light-content", true);

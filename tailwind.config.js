@@ -7,23 +7,12 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      // fontFamily: {
-      //   sans: platformSelect({
-      //     ios: "Outfit_400Regular",
-      //     android: "Outfit_400Regular",
-      //     default: "sans-serif",
-      //   }), // ["Outfit_400Regular", "sans-serif"],
-      //   serif: platformSelect({
-      //     ios: "Righteous_400Regular",
-      //     android: "Righteous_400Regular",
-      //     default: "serif",
-      //   }), // ["Righteous_400Regular", "serif"],
-      //   Righteous: platformSelect({
-      //     ios: "Righteous_400Regular",
-      //     android: "Righteous_400Regular",
-      //     default: "serif",
-      //   }),
-      // },
+      fontFamily: {
+        outfit: ["Outfit_400Regular", "sans-serif"],
+        "outfit-bold": ["Outfit_700Bold", "sans-serif"],
+        "outfit-light": ["Outfit_300Light", "sans-serif"],
+        righteous: ["Righteous_400Regular", "serif"],
+      },
     },
   },
   plugins: [],
