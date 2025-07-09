@@ -22,7 +22,7 @@ export default function App() {
           foreground: true,
         }}
         onPress={() => {
-          router.push("/onboarding");
+          router.push("/welcome/onboarding");
         }}
       >
         <View className="bg-[#182D4D] px-16 py-4 rounded-full mx-auto">

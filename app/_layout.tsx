@@ -46,6 +46,7 @@ export default function RootLayout() {
         >
           <Stack.Screen name="index" />
           <Stack.Screen name="onboarding" />
+          <Stack.Screen name="welcome/onboarding" />
           <Stack.Screen name="hello" />
           <Stack.Screen name="+not-found" />
         </Stack>
