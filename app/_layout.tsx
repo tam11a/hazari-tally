@@ -1,9 +1,8 @@
-import { DarkTheme, ThemeProvider } from "@react-navigation/native";
-
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar, View } from "react-native";
 import "./global.css";
 
 // SplashScreen.preventAutoHideAsync();
@@ -25,15 +24,31 @@ export default function RootLayout() {
   //   return null;
   // }
 
+  StatusBar.setBarStyle("light-content", true);
+  StatusBar.setBackgroundColor("transparent", true);
+  StatusBar.setTranslucent(true);
+
   return (
-    <ThemeProvider value={DarkTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar translucent backgroundColor="transparent" />
-      {/* <View style={[styles.statusBarBackground, { height: insets.top, backgroundColor: 'blue' }]} /> */}
-    </ThemeProvider>
+    <LinearGradient
+      colors={["#764985", "#090030"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
+    >
+      <View className="flex-1">
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </View>
+    </LinearGradient>
   );
 }

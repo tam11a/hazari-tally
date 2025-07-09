@@ -8,6 +8,7 @@
     "scheme": "hazaritally",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "translucent": false,
     "ios": {
       "supportsTablet": true
     },
