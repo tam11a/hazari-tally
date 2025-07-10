@@ -1,27 +1,27 @@
+import { Colors } from "@/constants/Colors";
 import { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Main = () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const { getAllGameData } = useGameData();
   const [gameList, setGameList] = React.useState<GameType[]>([]);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      try {
-        setGameList(await getAllGameData());
-      } catch (error) {
-        console.error("Error fetching game data:", error);
-      }
+      setGameList(await getAllGameData());
+      setRefreshing(false);
     };
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refreshing]);
 
   return (
     <View className={"flex-1"}>
@@ -30,6 +30,16 @@ const Main = () => {
         data={gameList}
         renderItem={({ item }) => <Item {...item} />}
         keyExtractor={(item) => item.gameId.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            colors={[Colors.dark.primary, Colors.dark.tint, Colors.dark.text]}
+            progressBackgroundColor={Colors.dark.paper}
+            onRefresh={() => {
+              setRefreshing(true);
+            }}
+          />
+        }
       />
     </View>
   );

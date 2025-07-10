@@ -81,7 +81,7 @@ const Update = () => {
   const onSubmit = async (data: GameType) => {
     const gamedata = await updateGameData(Number(gameId), data);
     if (gamedata) {
-      router.push({
+      router.replace({
         pathname: "/(game)/[gameId]",
         params: { gameId: gamedata.gameId.toString() },
       });
@@ -96,7 +96,12 @@ const Update = () => {
           style={{ paddingTop: 20 }}
         >
           <Pressable
-            onPress={() => router.back()}
+            onPress={() =>
+              router.replace({
+                pathname: "/(game)/[gameId]",
+                params: { gameId: gameId.toString() },
+              })
+            }
             style={{
               marginLeft: 20,
               padding: 5,

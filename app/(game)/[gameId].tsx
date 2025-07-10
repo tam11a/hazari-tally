@@ -1,11 +1,19 @@
+import { Colors } from "@/constants/Colors";
 import { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, Text } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GameDetailsPage() {
+  const [refreshing, setRefreshing] = useState(false);
   const { gameId } = useLocalSearchParams();
   const { getGameData } = useGameData();
   const [data, setData] = useState<GameType | null>(null);
@@ -15,6 +23,7 @@ export default function GameDetailsPage() {
       const gameData = await getGameData(Number(gameId));
       setData(gameData);
     }
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -22,7 +31,7 @@ export default function GameDetailsPage() {
     // Reload game data when the gameId changes
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId]);
+  }, [gameId, refreshing]);
 
   console.log(data);
 
@@ -31,22 +40,36 @@ export default function GameDetailsPage() {
       <ActivityIndicator color="#ffffff77" size={"large"} />
     </SafeAreaView>
   ) : (
-    <SafeAreaView>
-      {/* Game details page content goes here */}
-      <Text>Game Details Page # {gameId}</Text>
-      <Pressable
-        onPress={() =>
-          router.push({
-            pathname: "/(game)/update/[gameId]",
-            params: { gameId: gameId.toString() },
-          })
+    <SafeAreaView className="flex-1">
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            colors={[Colors.dark.primary, Colors.dark.tint, Colors.dark.text]}
+            progressBackgroundColor={Colors.dark.paper}
+            onRefresh={() => {
+              setRefreshing(true);
+            }}
+          />
         }
-        className="p-4 bg-white/10 rounded-lg m-2"
-        style={{ borderColor: "#fff5", borderWidth: 1 }}
-        android_ripple={{ color: "#fff5" }}
       >
-        <Text className="text-blue-500">Update</Text>
-      </Pressable>
+        {/* Game details page content goes here */}
+
+        <Text>Game Details Page # {gameId}</Text>
+        <Pressable
+          onPress={() =>
+            router.replace({
+              pathname: "/(game)/update/[gameId]",
+              params: { gameId: gameId.toString() },
+            })
+          }
+          className="p-4 bg-white/10 rounded-lg m-2"
+          style={{ borderColor: "#fff5", borderWidth: 1 }}
+          android_ripple={{ color: "#fff5" }}
+        >
+          <Text className="text-blue-500">Update</Text>
+        </Pressable>
+      </ScrollView>
     </SafeAreaView>
   ); // Placeholder for the game details page
 }
