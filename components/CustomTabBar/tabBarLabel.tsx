@@ -13,7 +13,7 @@ export default function TabBarLabel(props: {
 }) {
   const textAnimatedStyle = useAnimatedStyle(() => {
     return {
-      fontSize: withTiming(props.focused ? 14 : 0.0001, {
+      fontSize: withTiming(props.focused ? 16 : 0.0001, {
         duration: 200,
       }),
       transform: [{ translateX: withTiming(props.focused ? 0 : -20) }],

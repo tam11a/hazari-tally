@@ -44,7 +44,8 @@
             "node_modules/@expo-google-fonts/outfit/400Regular/Outfit_400Regular.ttf"
           ]
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true
