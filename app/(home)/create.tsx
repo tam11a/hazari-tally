@@ -38,11 +38,13 @@ import {
  *
  */
 
+export const GameIcons = ["spades", "clubs", "hearts", "diamonds"];
+
 const Create = () => {
   const { handleSubmit, control, getValues } = useForm<GameType>({
     resolver: joiResolver(GameSchema),
     defaultValues: {
-      gameIcon: "spade",
+      gameIcon: GameIcons[Math.floor(Math.random() * GameIcons.length)],
       gameName: "",
       isCompleted: false,
       maxRoundScore: 360,
@@ -249,7 +251,7 @@ const Create = () => {
                   className="font-outfit-bold"
                   style={{
                     fontSize: 18,
-                    color: Colors.dark.primary,
+                    color: Colors.dark.paper,
                   }}
                 >
                   Add Player
@@ -270,7 +272,7 @@ const Create = () => {
               className="font-outfit-bold"
               style={{
                 fontSize: 18,
-                color: Colors.dark.primary,
+                color: Colors.dark.paper,
               }}
             >
               Start

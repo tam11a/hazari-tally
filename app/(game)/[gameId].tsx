@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -107,15 +107,15 @@ export default function GameDetailsPage() {
             backgroundColor: "#fff2",
           }}
         >
-          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          <Ionicons name="chevron-back-outline" size={24} color="#ffffff" />
         </Pressable>
 
-        <Text className="text-white text-2xl font-bold flex-1 text-center font-righteous">
-          #{data.gameId}
+        <Text className="text-white text-2xl flex-1 text-center !font-righteous">
+          Game # {data.gameId}
         </Text>
         <Pressable
           onPress={() =>
-            router.replace({
+            router.push({
               pathname: "/(game)/update/[gameId]",
               params: { gameId: gameId.toString() },
             })
@@ -127,7 +127,7 @@ export default function GameDetailsPage() {
             backgroundColor: "#fff2",
           }}
         >
-          <Feather name="edit" size={24} color="white" />
+          <MaterialCommunityIcons name="pen" size={24} color="white" />
         </Pressable>
         {/* <View className="w-10" /> */}
       </View>
@@ -136,8 +136,8 @@ export default function GameDetailsPage() {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            colors={[Colors.dark.primary, Colors.dark.tint, Colors.dark.text]}
-            progressBackgroundColor={Colors.dark.paper}
+            colors={[Colors.dark.text]}
+            progressBackgroundColor={Colors.dark.primary}
             onRefresh={() => {
               setRefreshing(true);
             }}
@@ -145,42 +145,68 @@ export default function GameDetailsPage() {
         }
       >
         <View
-          className="border-2 rounded-2xl p-2"
+          className="rounded-2xl p-2 mt-5"
           style={{
-            borderColor: Colors.dark.text,
-            backgroundColor: Colors.dark.paper,
+            backgroundColor: "#fff2",
           }}
         >
-          <View className="flex-col items-start justify-center p-4 font-outfit gap-2">
-            <Text style={{ color: Colors.dark.shadowText }}>Game Name</Text>
-            <Text numberOfLines={1} className="text-white font-outfit-bold">
+          <View className="flex-col items-start justify-center p-4  gap-2">
+            <Text
+              style={{ color: Colors.dark.shadowText }}
+              className="font-outfit"
+            >
+              Game Name
+            </Text>
+            <Text
+              numberOfLines={1}
+              className="text-white text-xl font-outfit-bold"
+            >
               {data.gameName}
             </Text>
           </View>
 
-          <View
-            className="border-t-2"
-            style={{ borderColor: Colors.dark.text }}
-          ></View>
+          <View className="border-t-2" style={{ borderColor: "#fff2" }} />
 
           <View className="flex-row items-center justify-between">
-            <View className="flex-col items-center justify-center p-4 font-outfit gap-2">
-              <Text style={{ color: Colors.dark.shadowText }}>
+            <View className="flex-col w-1/3 items-center justify-center p-4 gap-2">
+              <Text
+                style={{ color: Colors.dark.shadowText }}
+                className="font-outfit"
+              >
                 Target Score
               </Text>
-              <Text numberOfLines={1} className="text-white font-outfit-bold">
+              <Text
+                numberOfLines={1}
+                className="text-white font-outfit-bold text-xl"
+              >
                 {data.targetScore}
               </Text>
             </View>
-            <View className="flex-col items-center justify-center p-4 font-outfit gap-2">
-              <Text style={{ color: Colors.dark.shadowText }}>Round Score</Text>
-              <Text numberOfLines={1} className="text-white font-outfit-bold">
+            <View className="flex-col w-1/3 items-center justify-center p-4 gap-2">
+              <Text
+                style={{ color: Colors.dark.shadowText }}
+                className="font-outfit"
+              >
+                Round Score
+              </Text>
+              <Text
+                numberOfLines={1}
+                className="text-white font-outfit-bold text-xl"
+              >
                 {data.maxRoundScore}
               </Text>
             </View>
-            <View className=" flex-col items-center justify-center p-4 font-outfit gap-2">
-              <Text style={{ color: Colors.dark.shadowText }}>Round</Text>
-              <Text numberOfLines={1} className="text-white font-outfit-bold">
+            <View className=" flex-col w-1/3 items-center justify-center p-4 gap-2">
+              <Text
+                style={{ color: Colors.dark.shadowText }}
+                className="font-outfit"
+              >
+                Round
+              </Text>
+              <Text
+                numberOfLines={1}
+                className="text-white font-outfit-bold text-xl"
+              >
                 {data.rounds.length}
               </Text>
             </View>
@@ -189,43 +215,43 @@ export default function GameDetailsPage() {
 
         <View className="mt-7 flex-1 gap-5">
           <Text
-            className="font-righteous text-3xl"
+            className="font-righteous text-2xl ml-3"
             style={{ color: Colors.dark.text }}
           >
             Leaderboard
           </Text>
           <View
-            className="border-2 rounded-2xl p-2"
+            className="rounded-2xl p-2"
             style={{
-              borderColor: Colors.dark.paper,
-              backgroundColor: Colors.dark.paper,
+              backgroundColor: "#fff2",
             }}
           >
             {playerData?.map((player, index) => (
               <View
                 key={player.id}
-                className={`flex-row items-center justify-between p-4 border-t-2 ${
-                  index === 0 ? "border-t-0" : ""
+                className={`flex-row items-center justify-between p-4  ${
+                  index === 0 ? "border-t-0" : "border-t-2"
                 }`}
-                style={{ borderColor: Colors.dark.text }}
+                style={{ borderColor: "#fff2" }}
               >
-                <View className="flex-row items-center gap-3">
+                <View className="flex-row items-center gap-4">
                   <Text
-                    className="text-white font-outfit-bold"
-                    style={{ color: Colors.dark.primary }}
+                    className="text-white text-lg font-outfit-bold"
+                    style={{ color: Colors.dark.tint }}
                   >
                     {`#${player.position}`}
                   </Text>
                   <Text
-                    className="text-white font-outfit-bold"
+                    className="text-white text-lg font-outfit-bold"
                     style={{ color: Colors.dark.text }}
+                    numberOfLines={1}
                   >
                     {player.name}
                   </Text>
                 </View>
                 <Text
-                  className="text-white font-outfit-bold"
-                  style={{ color: Colors.dark.primary }}
+                  className="text-white text-lg font-outfit-bold"
+                  style={{ color: Colors.dark.tint }}
                 >
                   {player.totalScore}
                 </Text>

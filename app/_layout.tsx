@@ -50,7 +50,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <LinearGradient
+      {/* <LinearGradient
         colors={["#9424BA", "#090030"]}
         start={{ x: -0.7, y: -0.4 }}
         end={{ x: 1, y: 1 }}
@@ -67,25 +67,32 @@ export default function RootLayout() {
             start={{ x: -0.7, y: -0.4 }}
             end={{ x: 1, y: 1 }}
             style={{ flex: 1, position: "relative" }}
+          > */}
+      <LinearGradient
+        colors={["#2F073C", "#090030"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ flex: 1, position: "relative" }}
+      >
+        <Dotted />
+        <View className="flex-1 z-1">
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: "transparent",
+              },
+              animation: "slide_from_right",
+            }}
           >
-            <Dotted />
-            <View className="flex-1 z-1">
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: {
-                    backgroundColor: "transparent",
-                  },
-                  animation: "slide_from_right",
-                }}
-              >
-                <Stack.Screen name="(onboarding)" />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </View>
-          </LinearGradient>
-        </LinearGradient>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </View>
       </LinearGradient>
+      {/* </LinearGradient>
+        </LinearGradient>
+      </LinearGradient> */}
     </>
   );
 }

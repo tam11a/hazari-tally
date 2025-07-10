@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import GameSchema, { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect } from "react";
@@ -25,7 +25,7 @@ const Update = () => {
   const { handleSubmit, control, reset } = useForm<GameType>({
     resolver: joiResolver(GameSchema),
     defaultValues: {
-      gameIcon: "spade",
+      gameIcon: "spades",
       gameName: "",
       isCompleted: false,
       maxRoundScore: 360,
@@ -109,12 +109,25 @@ const Update = () => {
               backgroundColor: "#fff2",
             }}
           >
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <Ionicons name="chevron-back-outline" size={24} color="#ffffff" />
           </Pressable>
-          <Text className="text-white text-lg font-bold flex-1 text-center">
+          <Text className="text-white text-2xl font-righteous flex-1 text-center">
             Edit Game
           </Text>
-          <View className="w-10" />
+          <Pressable
+            style={{
+              marginRight: 20,
+              padding: 5,
+              borderRadius: 20,
+              backgroundColor: "#fff2",
+            }}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={24}
+              color={Colors.dark.tint}
+            />
+          </Pressable>
         </View>
         <ScrollView>
           <View className="flex-1 p-7 flex flex-col gap-4">
@@ -253,7 +266,7 @@ const Update = () => {
                 className="font-outfit-bold"
                 style={{
                   fontSize: 18,
-                  color: Colors.dark.primary,
+                  color: Colors.dark.paper,
                 }}
               >
                 Update
