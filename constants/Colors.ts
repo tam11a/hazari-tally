@@ -25,7 +25,7 @@ export const Colors = {
     icon: "#9BA1A6",
     tabIconDefault: "#ECEDEE",
     tabIconSelected: "#FFFFFF",
-
+    shadowText: "#858292",
     paper: "#181232",
   },
 };
