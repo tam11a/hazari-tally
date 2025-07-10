@@ -10,7 +10,7 @@ import Animated, {
 interface CustomTabButtonProps
   extends React.PropsWithChildren,
     TabTriggerSlotProps {
-  Icon: React.ReactNode;
+  Icon?: React.ReactNode;
 }
 
 export const CustomTabButton = React.forwardRef<View, CustomTabButtonProps>(
