@@ -2,7 +2,7 @@ import { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GameDetailsPage() {
@@ -27,8 +27,8 @@ export default function GameDetailsPage() {
   console.log(data);
 
   return !data ? (
-    <SafeAreaView>
-      <Text>No Data With # {gameId}</Text>
+    <SafeAreaView className="flex-1 items-center justify-center">
+      <ActivityIndicator color="#ffffff77" size={"large"} />
     </SafeAreaView>
   ) : (
     <SafeAreaView>
