@@ -221,7 +221,7 @@ export default function GameDetailsPage() {
             Leaderboard
           </Text>
           <View
-            className="rounded-2xl p-2"
+            className="rounded-2xl px-2"
             style={{
               backgroundColor: "#fff2",
             }}
