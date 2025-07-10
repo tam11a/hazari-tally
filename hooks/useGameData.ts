@@ -84,7 +84,7 @@ export default function useGameData() {
   const updateGameData = async (
     gameId: number,
     updatedData: Partial<GameType>
-  ): Promise<void> => {
+  ): Promise<GameType | undefined> => {
     try {
       // Get all game data
       const allGames = JSON.parse(
@@ -103,6 +103,7 @@ export default function useGameData() {
 
         // Save the updated game history back to AsyncStorage
         await AsyncStorage.setItem("gameHistory", JSON.stringify(allGames));
+        return allGames[gameIndex];
       }
     } catch (error) {
       console.error("Error updating game data:", error);
