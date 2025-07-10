@@ -1,94 +1,76 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs, useRouter } from "expo-router";
+import { CustomTabButton } from "@/components/home/CustomTabButton";
+import { Colors } from "@/constants/Colors";
+import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import React from "react";
-import { Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function TabsLayout() {
-  const router = useRouter();
+// Icons
+import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+
+function TabsLayout() {
+  // get safe area insets for bottom tab bar
+  const insets = useSafeAreaInsets();
+  // adjust styles for the tab list to account for safe area insets
 
   return (
-    <SafeAreaView className="flex-1">
+    <View className="flex-1">
       <Tabs
-        initialRouteName="main"
-        screenOptions={{
-          tabBarActiveTintColor: "#401988",
-          tabBarInactiveTintColor: "white",
-          tabBarStyle: {
-            backgroundColor: "#181232",
-            borderTopWidth: 0,
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            elevation: 0,
-            paddingBottom: 5,
-            paddingTop: 5,
-            height: 60,
-          },
-          tabBarLabelStyle: {
-            fontWeight: "bold",
-          },
-          headerStyle: {
-            backgroundColor: "#181232",
-          },
-          headerTintColor: "#ffffff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "#ffffff",
-          },
-
-          headerTitleAlign: "center", // Center the title
-          headerLeft: () => (
-            <Pressable
-              onPress={() => router.push("/")}
-              style={{
-                marginLeft: 10,
-                marginRight: 10,
-                padding: 5,
-                borderRadius: 20,
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-              }}
-            >
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
-            </Pressable>
-          ),
+        options={{
+          initialRouteName: "home",
         }}
       >
-        <Tabs.Screen
-          name="main"
-          options={{
-            title: "Home",
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home" size={size} color={color} />
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
-        <Tabs.Screen
-          name="create"
-          options={{
-            title: "Create Game",
-            headerShown: true,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="add-circle" size={size} color={color} />
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
-        <Tabs.Screen
-          name="settings"
-          options={{
-            title: "Settings",
-            headerShown: true,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
+        <TabSlot />
+        <TabList
+          style={[
+            styles.tabList,
+            {
+              bottom: insets.bottom + 10, // add padding for bottom safe area
+            },
+          ]}
+        >
+          <TabTrigger name="home" href="/(home)/main" asChild>
+            <CustomTabButton
+              Icon={<SimpleLineIcons name="home" size={20} color={"#fff"} />}
+            >
+              Home
+            </CustomTabButton>
+          </TabTrigger>
+          <TabTrigger name="Create" href="/(home)/create" asChild>
+            <CustomTabButton
+              Icon={<Ionicons name="create-outline" size={24} color={"#fff"} />}
+            >
+              New
+            </CustomTabButton>
+          </TabTrigger>
+          <TabTrigger name="settings" href="/(home)/settings" asChild>
+            <CustomTabButton
+              Icon={<Feather name="settings" size={20} color={"#fff"} />}
+            >
+              Settings
+            </CustomTabButton>
+          </TabTrigger>
+        </TabList>
       </Tabs>
-    </SafeAreaView>
+    </View>
   );
 }
+
+export default TabsLayout;
+
+const styles = StyleSheet.create({
+  tabList: {
+    display: "flex",
+    position: "absolute",
+    left: "50%",
+    transform: [{ translateX: "-50%" }],
+    borderRadius: 1000,
+    backgroundColor: Colors.dark.paper,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "70%",
+    padding: 8,
+  },
+});

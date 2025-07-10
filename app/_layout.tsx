@@ -2,9 +2,10 @@ import { SplashScreen, Stack } from "expo-router";
 import "react-native-reanimated";
 
 import { LinearGradient } from "expo-linear-gradient";
-import { Image, StatusBar, View } from "react-native";
+import { StatusBar, View } from "react-native";
 import "./global.css";
 
+import Dotted from "@/components/Dotted";
 import {
   Outfit_100Thin,
   Outfit_400Regular,
@@ -48,51 +49,43 @@ export default function RootLayout() {
   StatusBar.setTranslucent(true);
 
   return (
-    <LinearGradient
-      colors={["#9424BA", "#090030"]}
-      start={{ x: -0.7, y: -0.4 }}
-      end={{ x: 1, y: 1 }}
-      style={{ flex: 1, position: "relative" }}
-    >
+    <>
       <LinearGradient
-        colors={["#9424BA", "#09003090"]}
-        start={{ x: 1, y: 1.4 }}
-        end={{ x: 0, y: 0.9 }}
+        colors={["#9424BA", "#090030"]}
+        start={{ x: -0.7, y: -0.4 }}
+        end={{ x: 1, y: 1 }}
         style={{ flex: 1, position: "relative" }}
       >
         <LinearGradient
-          colors={["#E73C7281", "#09003010"]}
-          start={{ x: -0.7, y: -0.4 }}
-          end={{ x: 1, y: 1 }}
+          colors={["#9424BA", "#09003090"]}
+          start={{ x: 1, y: 1.4 }}
+          end={{ x: 0, y: 0.9 }}
           style={{ flex: 1, position: "relative" }}
         >
-          <Image
-            source={require("@/assets/icons/dot.png")}
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              zIndex: 0,
-              opacity: 0.05,
-            }}
-            resizeMode="repeat"
-          />
-          <View className="flex-1 z-1">
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                contentStyle: {
-                  backgroundColor: "transparent",
-                },
-                animation: "slide_from_right",
-              }}
-            >
-              <Stack.Screen name="(onboarding)" />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </View>
+          <LinearGradient
+            colors={["#E73C7281", "#09003010"]}
+            start={{ x: -0.7, y: -0.4 }}
+            end={{ x: 1, y: 1 }}
+            style={{ flex: 1, position: "relative" }}
+          >
+            <Dotted />
+            <View className="flex-1 z-1">
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: {
+                    backgroundColor: "transparent",
+                  },
+                  animation: "slide_from_right",
+                }}
+              >
+                <Stack.Screen name="(onboarding)" />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </View>
+          </LinearGradient>
         </LinearGradient>
       </LinearGradient>
-    </LinearGradient>
+    </>
   );
 }
