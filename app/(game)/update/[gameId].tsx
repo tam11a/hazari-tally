@@ -121,7 +121,7 @@ const Update = () => {
             <Ionicons name="chevron-back-outline" size={24} color="#ffffff" />
           </Pressable>
           <Text className="text-white text-2xl font-righteous flex-1 text-center">
-            Edit Game
+            Edit # {gameId}
           </Text>
           <Pressable
             style={{
@@ -141,7 +141,7 @@ const Update = () => {
         </View>
         <ScrollView>
           <View className="flex-1 p-7 flex flex-col gap-4">
-            <Text className="text-lg font-outfit text-white">Game Name</Text>
+            <Text className="text-lg font-outfit text-white">Tally Name</Text>
             <Controller
               control={control}
               name="gameName"
@@ -152,7 +152,7 @@ const Update = () => {
                 <TextInput
                   className="px-6 py-4 text-lg font-outfit text-white bg-white/10 rounded-lg"
                   maxLength={40}
-                  placeholder="Game Name.."
+                  placeholder="Tally Name.."
                   placeholderTextColor="#fff5"
                   onChangeText={onChange}
                   onBlur={onBlur}

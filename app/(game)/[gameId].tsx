@@ -167,7 +167,7 @@ export default function GameDetailsPage() {
             </Pressable>
 
             <Text className="text-white text-2xl flex-1 text-center !font-righteous">
-              Game # {data.gameId}
+              Tally # {data.gameId}
             </Text>
             <Pressable
               onPress={() =>
@@ -211,7 +211,7 @@ export default function GameDetailsPage() {
                   style={{ color: Colors.dark.shadowText }}
                   className="font-outfit"
                 >
-                  Game Name
+                  Tally Name
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -305,7 +305,7 @@ export default function GameDetailsPage() {
                     <View className="flex-row items-center gap-4">
                       <Text
                         className="text-white text-lg font-outfit-bold"
-                        style={{ color: Colors.dark.tint }}
+                        style={{ color: Colors.dark.shadowText }}
                       >
                         {`#${player.position}`}
                       </Text>
@@ -319,7 +319,7 @@ export default function GameDetailsPage() {
                     </View>
                     <Text
                       className="text-white text-lg font-outfit-bold"
-                      style={{ color: Colors.dark.tint }}
+                      style={{ color: Colors.dark.shadowText }}
                     >
                       {player.totalScore}
                     </Text>
