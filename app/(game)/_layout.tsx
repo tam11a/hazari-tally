@@ -13,21 +13,6 @@ export default function GameLayout() {
     >
       <Stack.Screen name="[gameId]" />
       <Stack.Screen name="update/[gameId]" />
-      <Stack.Screen
-        name="addscore/[gameId]"
-        options={{
-          presentation: "modal",
-          animation: "slide_from_right",
-          headerShown: true,
-          headerTitle: "Add Score",
-          headerTitleAlign: "center",
-          headerStyle: {
-            backgroundColor: "transparent",
-          },
-          headerTintColor: "#ffffff",
-          headerShadowVisible: false,
-        }}
-      />
     </Stack>
   );
 }
