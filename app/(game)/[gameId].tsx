@@ -5,6 +5,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
+  BottomSheetTextInput,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -26,7 +27,7 @@ import {
 export default function GameDetailsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const { gameId } = useLocalSearchParams();
-  const { getGameData } = useGameData();
+  const { getGameData, updateGameData } = useGameData();
   const [data, setData] = useState<GameType | null>(null);
   const insets = useSafeAreaInsets();
 
@@ -85,6 +86,9 @@ export default function GameDetailsPage() {
     setRefreshing(false);
   };
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentPress = () => bottomSheetModalRef?.current?.present();
+
   useEffect(() => {
     loadGameData();
     // Reload game data when the gameId changes
@@ -92,23 +96,105 @@ export default function GameDetailsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, refreshing]);
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const handlePresentPress = () => bottomSheetModalRef?.current?.present();
+  const onAddScore = async (scores: { playerId: number; score: number }[]) => {
+    if (!data) return;
+
+    const updatedRounds = [...data.rounds];
+    if (!updatedRounds.length) {
+      updatedRounds.push({ id: 1, scores });
+    } else {
+      // Create a new round with a unique id
+      const newRoundId =
+        updatedRounds.length > 0
+          ? Math.max(...updatedRounds.map((r) => r.id)) + 1
+          : 1;
+      updatedRounds.push({
+        id: newRoundId,
+        scores,
+      });
+    }
+
+    // Update the game data with the new round
+    await updateGameData(Number(gameId), {
+      ...data,
+      rounds: updatedRounds,
+    });
+
+    await loadGameData();
+  };
 
   const AddSheetModal = ({
     ref,
+    players,
+    onAddScore,
   }: {
     ref: React.RefObject<BottomSheetModal | null>;
+    players: { id: number; name: string }[];
+    onAddScore: (scores: { playerId: number; score: number }[]) => void;
   }) => {
+    const [scores, setScores] = useState<{ [id: number]: string }>({});
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    if (!data) return;
+
+    const handleScoreChange = (id: number, value: string) => {
+      setScores((prev) => ({ ...prev, [id]: value }));
+    };
+
+    const handleSubmit = () => {
+      const formattedScores = players.map((player) => {
+        // check out for valid numbers and all the validation logics on number input
+
+        const score = Number(scores[player.id]) || 0;
+
+        if (score < 0) {
+          setErrorMessage(`Score cannot be negative for ${player.name}`);
+        }
+        if (score > data.maxRoundScore) {
+          setErrorMessage(
+            `Score for ${player.name} cannot exceed ${data.maxRoundScore}`
+          );
+        }
+
+        return {
+          playerId: player.id,
+          score: Number(scores[player.id]) || 0,
+        };
+      });
+
+      if (errorMessage) return;
+
+      const totalScore = formattedScores.reduce(
+        (acc, score) => acc + score.score,
+        0
+      );
+
+      if (totalScore < data.maxRoundScore) {
+        setErrorMessage(
+          `Total score must be at least ${data.maxRoundScore}. Current total: ${totalScore}`
+        );
+        return;
+      } else if (totalScore > data.maxRoundScore) {
+        setErrorMessage(
+          `Total score cannot exceed ${data.maxRoundScore}. Current total: ${totalScore}`
+        );
+        return;
+      }
+
+      onAddScore(formattedScores);
+      ref.current?.dismiss();
+    };
+
     return (
       <BottomSheetModal
         ref={ref}
         index={0}
-        snapPoints={["50%"]}
+        enableDynamicSizing
         backgroundStyle={{
           backgroundColor: Colors.dark.paper,
         }}
         handleIndicatorStyle={{ backgroundColor: Colors.dark.shadowText }}
+        keyboardBehavior="interactive"
         handleStyle={{
           backgroundColor: Colors.dark.paper,
           borderTopLeftRadius: 20,
@@ -124,14 +210,77 @@ export default function GameDetailsPage() {
           <Text className="text-white font-outfit-bold text-2xl">
             Add Score
           </Text>
-          <Text className="text-white font-outfit text-lg">Coming Soon!</Text>
-          <Pressable
-            onPress={() => bottomSheetModalRef?.current?.dismiss()}
-            className="mt-4 px-6 py-2 bg-white/10 rounded-lg"
-            style={{ borderColor: "#fff5", borderWidth: 1 }}
-          >
-            <Text className="text-white font-outfit-bold">Close</Text>
-          </Pressable>
+          {errorMessage ? (
+            <Text
+              className="my-4 font-outfit"
+              style={{
+                color: Colors.dark.error,
+              }}
+            >
+              {errorMessage}
+            </Text>
+          ) : null}
+          <View className="w-full px-6 mt-4">
+            {players.map((player) => (
+              <View
+                key={player.id}
+                className="flex-row items-center mb-3 gap-3"
+              >
+                <Text className="text-white font-outfit flex-1">
+                  {player.name}
+                </Text>
+                <Pressable
+                  android_ripple={{
+                    color: "#00000022",
+                    foreground: true,
+                  }}
+                  className=""
+                  onPress={() => {
+                    const totalScore = Object.values(scores).reduce(
+                      (acc, score) => acc + (Number(score) || 0),
+                      0
+                    );
+                    handleScoreChange(
+                      player.id,
+                      (data.maxRoundScore - totalScore).toString()
+                    );
+                  }}
+                >
+                  <Ionicons
+                    name="calculator"
+                    size={24}
+                    color={Colors.dark.shadowText}
+                  />
+                </Pressable>
+                <BottomSheetTextInput
+                  className="bg-white/10 text-white px-3 py-2 rounded-lg w-20 text-center font-outfit"
+                  keyboardType="numeric"
+                  value={scores[player.id] || ""}
+                  onChangeText={(val) => {
+                    handleScoreChange(player.id, val);
+                  }}
+                  placeholder="0"
+                  placeholderTextColor="#fff7"
+                />
+              </View>
+            ))}
+          </View>
+          <View className="flex flex-row gap-4 px-6 mt-4">
+            <Pressable
+              onPress={() => ref.current?.dismiss()}
+              className="bg-white/10 rounded-lg flex-1 items-center justify-center px-4 py-2"
+              style={{ borderColor: "#fff5", borderWidth: 1 }}
+            >
+              <Text className="text-white font-outfit-bold">Close</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleSubmit}
+              className="bg-white/10 rounded-lg flex-1 items-center justify-center px-4 py-2"
+              style={{ borderColor: "#fff5", borderWidth: 1 }}
+            >
+              <Text className="text-white font-outfit-bold">Submit</Text>
+            </Pressable>
+          </View>
         </BottomSheetView>
       </BottomSheetModal>
     );
@@ -145,7 +294,11 @@ export default function GameDetailsPage() {
     <GestureHandlerRootView className="flex-1">
       <BottomSheetModalProvider>
         <SafeAreaView className="flex-1">
-          <AddSheetModal ref={bottomSheetModalRef} />
+          <AddSheetModal
+            ref={bottomSheetModalRef}
+            players={data.players}
+            onAddScore={onAddScore}
+          />
           <View
             className="flex-row items-center justify-between"
             style={{ paddingTop: 20 }}
@@ -327,6 +480,96 @@ export default function GameDetailsPage() {
                 ))}
               </View>
             </View>
+
+            {!!data.rounds.length && (
+              <View className="mt-7 gap-5">
+                <View className="flex-row items-center justify-between">
+                  <Text
+                    className="font-righteous text-2xl ml-3"
+                    style={{ color: Colors.dark.text }}
+                  >
+                    Rounds
+                  </Text>
+                </View>
+
+                <View
+                  className="rounded-2xl overflow-hidden"
+                  style={{ backgroundColor: "#fff2" }}
+                >
+                  {/* Table Header */}
+                  <View
+                    className="flex-row border-b-2"
+                    style={{ borderColor: "#fff2" }}
+                  >
+                    <View className="w-20 p-2">
+                      <Text
+                        className="text-white font-outfit-bold text-center"
+                        numberOfLines={1}
+                      >
+                        Round
+                      </Text>
+                    </View>
+                    {data.players.map((player) => (
+                      <View key={player.id} className="flex-1 p-2">
+                        <Text
+                          className="text-white font-outfit-bold text-center"
+                          numberOfLines={1}
+                        >
+                          {player.name}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                  {/* Table Rows */}
+                  {data.rounds
+                    .sort((a, b) => b.id - a.id)
+                    .map((round) => (
+                      <View
+                        key={round.id}
+                        className="flex-row border-b"
+                        style={{ borderColor: "#fff2" }}
+                      >
+                        <View className="w-20 p-2 gap-1 flex-row items-center justify-center">
+                          <Text className="text-white font-outfit-bold text-center">
+                            {round.id}
+                          </Text>
+                          <Pressable
+                            onPress={async () => {
+                              // Remove the round and update data
+                              const updatedRounds = data.rounds.filter(
+                                (r) => r.id !== round.id
+                              );
+                              await updateGameData(Number(gameId), {
+                                ...data,
+                                rounds: updatedRounds,
+                              });
+                              await loadGameData();
+                            }}
+                          >
+                            <MaterialCommunityIcons
+                              name="trash-can-outline"
+                              size={14}
+                              color="#ff6b6b"
+                            />
+                          </Pressable>
+                        </View>
+                        {data.players.map((player) => {
+                          const scoreObj = round.scores.find(
+                            (score) => score.playerId === player.id
+                          );
+                          return (
+                            <View key={player.id} className="flex-1 p-2">
+                              <Text className="text-white text-center font-outfit">
+                                {scoreObj ? scoreObj.score : "-"}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    ))}
+                </View>
+              </View>
+            )}
           </ScrollView>
         </SafeAreaView>
       </BottomSheetModalProvider>
