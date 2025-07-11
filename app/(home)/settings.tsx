@@ -36,6 +36,22 @@ const Settings = () => {
         label="Exit"
         description="Close the app"
       />
+
+      {/* App Version */}
+      <View className="px-4 py-6 rounded-2xl m-2 flex flex-col items-center justify-start gap-1 mt-14">
+        <Text
+          className="text-sm font-outfit-bold"
+          style={{ color: Colors.dark.shadowText }}
+        >
+          Hazari Tally
+        </Text>
+        <Text
+          className="font-outfit text-xs"
+          style={{ color: Colors.dark.shadowText }}
+        >
+          Version 1.0.0
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };
