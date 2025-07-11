@@ -17,6 +17,7 @@ export const Colors = {
     tabIconSelected: "#FFFFFF",
     shadowText: "#9C96B9",
     paper: "#181232",
+    error: "#FF4D4D",
   },
   dark: {
     text: "#ECEDEE",
@@ -28,5 +29,6 @@ export const Colors = {
     tabIconSelected: "#FFFFFF",
     shadowText: "#9C96B9",
     paper: "#181232",
+    error: "#FF4D4D",
   },
 };

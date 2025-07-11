@@ -3,7 +3,7 @@ import { Colors } from "@/constants/Colors";
 import { GameType } from "@/constants/Schema";
 import CardSymbols, { getCardImage } from "@/constants/Symbols";
 import useGameData from "@/hooks/useGameData";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import moment from "moment";
@@ -87,9 +87,31 @@ const Main = () => {
             colors={[Colors.dark.text]}
             progressBackgroundColor={Colors.dark.primary}
             onRefresh={() => setRefreshing(true)}
+            progressViewOffset={HEADER_HEIGHT + 160} // Adjust based on header height
           />
         }
         onScroll={onScroll}
+        ListEmptyComponent={() => (
+          <View className="flex-1 items-center justify-center mt-20">
+            <MaterialCommunityIcons
+              name="folder-table"
+              size={60}
+              color={Colors.dark.shadowText}
+            />
+            <Text
+              className="text-lg font-outfit-bold"
+              style={{ color: Colors.dark.text }}
+            >
+              No tallies found
+            </Text>
+            <Text
+              className="text-sm font-outfit"
+              style={{ color: Colors.dark.shadowText }}
+            >
+              Create a new tally to get started
+            </Text>
+          </View>
+        )}
         scrollEventThrottle={16}
         ListHeaderComponent={<View style={{ height: HEADER_HEIGHT + 160 }} />}
         contentContainerStyle={{ paddingBottom: 16 }}

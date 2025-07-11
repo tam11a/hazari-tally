@@ -110,11 +110,22 @@ export default function useGameData() {
     }
   };
 
+  // Function to delete all game data
+  const deleteAllGameData = async (): Promise<void> => {
+    try {
+      // Clear the game history from AsyncStorage
+      await AsyncStorage.removeItem("gameHistory");
+    } catch (error) {
+      console.error("Error deleting all game data:", error);
+    }
+  };
+
   return {
     addGameData,
     getGameData,
     getAllGameData,
     deleteGameData,
     updateGameData,
+    deleteAllGameData,
   };
 }

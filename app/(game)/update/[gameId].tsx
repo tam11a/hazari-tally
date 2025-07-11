@@ -20,7 +20,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Update = () => {
   const { gameId } = useLocalSearchParams();
-  const { getGameData, updateGameData } = useGameData();
+  const { getGameData, updateGameData, deleteGameData } = useGameData();
 
   const { handleSubmit, control, reset } = useForm<GameType>({
     resolver: joiResolver(GameSchema),
@@ -88,6 +88,15 @@ const Update = () => {
     }
   };
 
+  const onDelete = async () => {
+    if (gameId) {
+      await deleteGameData(Number(gameId));
+      router.replace({
+        pathname: "/(home)/main",
+      });
+    }
+  };
+
   return (
     <KeyboardAvoidingView behavior={"padding"} keyboardVerticalOffset={20}>
       <SafeAreaView>
@@ -121,6 +130,7 @@ const Update = () => {
               borderRadius: 20,
               backgroundColor: "#fff2",
             }}
+            onPress={onDelete}
           >
             <MaterialIcons
               name="delete-outline"

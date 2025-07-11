@@ -22,7 +22,7 @@ const CardSymbols = {
 };
 
 export const getCardImage = (symbol: keyof typeof CardSymbols) => {
-  return CardSymbols[symbol]?.image || require("@/assets/symbols/spades.png");
+  return CardSymbols[symbol]?.image || require("@/assets/symbols/hearts.png");
 };
 
 export default CardSymbols;

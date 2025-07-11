@@ -41,7 +41,7 @@ import {
 export const GameIcons = ["spades", "clubs", "hearts", "diamonds"];
 
 const Create = () => {
-  const { handleSubmit, control, getValues } = useForm<GameType>({
+  const { handleSubmit, control, getValues, reset } = useForm<GameType>({
     resolver: joiResolver(GameSchema),
     defaultValues: {
       gameIcon: GameIcons[Math.floor(Math.random() * GameIcons.length)],
@@ -86,6 +86,7 @@ const Create = () => {
   const onSubmit = async (data: GameType) => {
     const gamedata: GameType | undefined = await addGameData(data);
     if (gamedata) {
+      reset();
       router.push({
         pathname: "/(game)/[gameId]",
         params: { gameId: gamedata.gameId.toString() },
