@@ -79,6 +79,23 @@ const Update = () => {
 
   const router = useRouter();
   const onSubmit = async (data: GameType) => {
+    if (!gameId) return;
+
+    // get the highest person score
+    const highestScore = data.rounds.reduce((max, round) => {
+      const roundMax = Math.max(
+        ...round.scores.map((score) => score.score || 0)
+      );
+      return Math.max(max, roundMax);
+    }, 0);
+
+    // if the highest score is greater than the target score, set isCompleted to true
+    if (highestScore >= data.targetScore) {
+      data.isCompleted = true;
+    } else {
+      data.isCompleted = false;
+    }
+
     const gamedata = await updateGameData(Number(gameId), data);
     if (gamedata) {
       router.replace({

@@ -1,7 +1,11 @@
 import { Colors } from "@/constants/Colors";
 import { GameType } from "@/constants/Schema";
 import useGameData from "@/hooks/useGameData";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  FontAwesome6,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -18,6 +22,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { Balloons, PopperDirection } from "react-native-fiesta";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   SafeAreaView,
@@ -30,7 +35,6 @@ export default function GameDetailsPage() {
   const { getGameData, updateGameData } = useGameData();
   const [data, setData] = useState<GameType | null>(null);
   const insets = useSafeAreaInsets();
-
   const [playerData, setPlayerData] = useState<
     { id: number; name: string; totalScore: number; position: number }[] | null
   >(null);
@@ -57,6 +61,18 @@ export default function GameDetailsPage() {
 
         // Sort players by totalScore descending
         playersWithScores.sort((a, b) => b.totalScore - a.totalScore);
+
+        if (
+          playersWithScores[0].totalScore >= gameData.targetScore &&
+          !gameData.isCompleted
+        ) {
+          // If the top player has reached the target score, mark the game as completed
+          await updateGameData(Number(gameId), {
+            ...gameData,
+            isCompleted: true,
+          });
+          return loadGameData();
+        }
 
         // Assign rank (id) based on position, same rank for same score
         let lastScore: number | null = null;
@@ -95,6 +111,18 @@ export default function GameDetailsPage() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, refreshing]);
+
+  const [showBalloons, setShowBalloons] = useState(false);
+  useEffect(() => {
+    if (!data || !data.isCompleted) return;
+    setShowBalloons(true);
+    // Hide balloons after 5 seconds
+    // This is just a simple timeout, you can replace it with a more complex animation if needed
+    const timer = setTimeout(() => {
+      setShowBalloons(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [data]);
 
   const onAddScore = async (scores: { playerId: number; score: number }[]) => {
     if (!data) return;
@@ -257,6 +285,7 @@ export default function GameDetailsPage() {
                   keyboardType="numeric"
                   value={scores[player.id] || ""}
                   onChangeText={(val) => {
+                    setErrorMessage("");
                     handleScoreChange(player.id, val);
                   }}
                   placeholder="0"
@@ -299,6 +328,7 @@ export default function GameDetailsPage() {
             players={data.players}
             onAddScore={onAddScore}
           />
+          {showBalloons && <Balloons direction={PopperDirection.Ascending} />}
           <View
             className="flex-row items-center justify-between"
             style={{ paddingTop: 20 }}
@@ -430,16 +460,20 @@ export default function GameDetailsPage() {
                 >
                   Leaderboard
                 </Text>
-                <Pressable
-                  onPress={handlePresentPress}
-                  className="flex-row items-center gap-2 rounded-full px-4 py-2"
-                  style={{
-                    backgroundColor: "#fff2",
-                  }}
-                >
-                  <Ionicons name="add" size={20} color="#ffffff" />
-                  <Text className="text-white font-outfit-bold">Add Score</Text>
-                </Pressable>
+                {!data.isCompleted && (
+                  <Pressable
+                    onPress={handlePresentPress}
+                    className="flex-row items-center gap-2 rounded-full px-4 py-2"
+                    style={{
+                      backgroundColor: "#fff2",
+                    }}
+                  >
+                    <Ionicons name="add" size={20} color="#ffffff" />
+                    <Text className="text-white font-outfit-bold">
+                      Add Score
+                    </Text>
+                  </Pressable>
+                )}
               </View>
               <View
                 className="rounded-2xl px-2"
@@ -450,18 +484,18 @@ export default function GameDetailsPage() {
                 {playerData?.map((player, index) => (
                   <View
                     key={player.id}
-                    className={`flex-row items-center justify-between p-4  ${
+                    className={`flex flex-row items-center justify-between p-4 gap-3  ${
                       index === 0 ? "border-t-0" : "border-t-2"
                     }`}
                     style={{ borderColor: "#fff2" }}
                   >
-                    <View className="flex-row items-center gap-4">
-                      <Text
-                        className="text-white text-lg font-outfit-bold"
-                        style={{ color: Colors.dark.shadowText }}
-                      >
-                        {`#${player.position}`}
-                      </Text>
+                    <Text
+                      className="text-white text-lg font-outfit-bold"
+                      style={{ color: Colors.dark.shadowText }}
+                    >
+                      {`#${player.position}`}
+                    </Text>
+                    <View className="flex-1 flex flex-row items-center gap-4">
                       <Text
                         className="text-white text-lg font-outfit-bold"
                         style={{ color: Colors.dark.text }}
@@ -469,6 +503,9 @@ export default function GameDetailsPage() {
                       >
                         {player.name}
                       </Text>
+                      {player.position === 1 && data.isCompleted && (
+                        <FontAwesome6 name="crown" size={18} color="#C69320" />
+                      )}
                     </View>
                     <Text
                       className="text-white text-lg font-outfit-bold"
@@ -533,25 +570,27 @@ export default function GameDetailsPage() {
                           <Text className="text-white font-outfit-bold text-center">
                             {round.id}
                           </Text>
-                          <Pressable
-                            onPress={async () => {
-                              // Remove the round and update data
-                              const updatedRounds = data.rounds.filter(
-                                (r) => r.id !== round.id
-                              );
-                              await updateGameData(Number(gameId), {
-                                ...data,
-                                rounds: updatedRounds,
-                              });
-                              await loadGameData();
-                            }}
-                          >
-                            <MaterialCommunityIcons
-                              name="trash-can-outline"
-                              size={14}
-                              color="#ff6b6b"
-                            />
-                          </Pressable>
+                          {!data.isCompleted && (
+                            <Pressable
+                              onPress={async () => {
+                                // Remove the round and update data
+                                const updatedRounds = data.rounds.filter(
+                                  (r) => r.id !== round.id
+                                );
+                                await updateGameData(Number(gameId), {
+                                  ...data,
+                                  rounds: updatedRounds,
+                                });
+                                await loadGameData();
+                              }}
+                            >
+                              <MaterialCommunityIcons
+                                name="trash-can-outline"
+                                size={14}
+                                color="#ff6b6b"
+                              />
+                            </Pressable>
+                          )}
                         </View>
                         {data.players.map((player) => {
                           const scoreObj = round.scores.find(
