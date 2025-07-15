@@ -74,23 +74,18 @@ export default function GameDetailsPage() {
           return loadGameData();
         }
 
-        // Assign rank (id) based on position, same rank for same score
+        // Assign rank (id) based on position, same rank for same score, and next rank is incremented by 1
         let lastScore: number | null = null;
-        let lastRank = 0;
-        let currentRank = 1;
+        // let currentRank = 1;
+        let position = 1;
         const rankedPlayers = playersWithScores.map((player, idx) => {
-          if (lastScore === player.totalScore) {
-            // Same score as previous, same rank
-            currentRank = lastRank;
-          } else {
-            // New score, rank is idx+1
-            currentRank = idx + 1;
-            lastScore = player.totalScore;
-            lastRank = currentRank;
+          if (lastScore !== null && lastScore !== player.totalScore) {
+            position++;
           }
+          lastScore = player.totalScore;
           return {
             id: player.originalId,
-            position: currentRank,
+            position: position,
             name: player.name,
             totalScore: player.totalScore,
           };
